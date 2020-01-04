@@ -98,7 +98,7 @@ class _TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget> {
       return Container();
     }
 
-    List<Widget> widgtes = List();
+    List<Widget> widgets = List();
 
     TargetPosition target = getTargetCurrent(currentTarget);
     var positioned = Offset(target.offset.dx + target.size.width / 2,
@@ -122,23 +122,25 @@ class _TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget> {
     double bottom;
     double left;
 
-    widgtes = currentTarget.contents.map<Widget>((i) {
-      switch (i.align) {
+    widgets = currentTarget.contents.map<Widget>((widget) {
+      switch (widget.align) {
         case AlignContent.bottom:
           {
             weight = MediaQuery.of(context).size.width;
             left = 0;
-            top = positioned.dy + haloHeight;
-            bottom = null;
+            top = widget.y == null ? positioned.dy + haloHeight : null;
+            bottom = widget.y != null ? widget.y : null;
           }
           break;
         case AlignContent.top:
           {
             weight = MediaQuery.of(context).size.width;
             left = 0;
-            top = null;
-            bottom = haloHeight +
-                (MediaQuery.of(context).size.height - positioned.dy);
+            top = widget.y != null ? widget.y : null;
+            bottom = widget.y == null
+                ? haloHeight +
+                    (MediaQuery.of(context).size.height - positioned.dy)
+                : null;
           }
           break;
         case AlignContent.left:
@@ -171,7 +173,7 @@ class _TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget> {
             width: weight,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: i.child,
+              child: widget.child,
             ),
           ),
         ),
@@ -179,7 +181,7 @@ class _TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget> {
     }).toList();
 
     return Stack(
-      children: widgtes,
+      children: widgets,
     );
   }
 
